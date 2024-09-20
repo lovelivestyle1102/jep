@@ -1,0 +1,68 @@
+options {
+	JAVA_UNICODE_ESCAPE = true;
+	MULTI = true;
+	VISITOR = true;
+	VISITOR_EXCEPTION = "ParseException";
+	NODE_DEFAULT_VOID = true;
+    NODE_PACKAGE = "com.utry.parser";
+	STATIC = false;
+}
+
+
+PARSER_BEGIN(ExpressionParser)
+
+package com.utry.parser;
+
+import java.util.Vector;
+
+public class ExpressionParser {
+
+    public static void main(String[] args){
+
+    }
+
+}
+
+PARSER_END(ExpressionParser)
+
+/***************************************************************
+SKIP
+***************************************************************/
+
+<*> SKIP :
+{
+  " "
+  | "\t"
+  | "\n"
+  | "\r"
+
+  | <"//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
+  | <"/*" (~["*"])* "*" (~["/"] (~["*"])* "*")* "/">
+}
+
+/* OPERATORS */
+<*> TOKEN:
+{	< AND:  "And" >
+|	< OR:   "Or" >
+|	< LRND:	"("  >	// rjm
+|	< RRND:	")"	 >	// rjm
+|	< BEFORE:	"Before"	 >	// rjm
+|	< AFTER:	"After"	 >	// rjm
+|	< NEAR:	"Near"	 >	// rjm
+|	< NOT:	"!"	 >	// rjm
+}
+
+
+void UnaryExpression() :
+{
+}
+{
+  ( <OR> UnaryExpression())
+|
+  ( <AND> UnaryExpression()
+    {
+	  jjtThis.setOperator(opSet.getUMinus());
+    }
+  ) #FunNode(1)
+}
+

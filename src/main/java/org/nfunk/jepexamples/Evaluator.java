@@ -44,8 +44,11 @@ public class Evaluator extends Applet {
 
 	/* GUI components */
 	private TextField exprField, xField;
+
 	private TextArea errorTextArea;
+
 	private Label resultLabel;
+
 	private Checkbox implicitCheckbox, undeclaredCheckbox;
 
 	
@@ -87,11 +90,13 @@ public class Evaluator extends Applet {
 		
 		// Set up the parser (more initialization in parseExpression()) 
 		myParser = new JEP();
+
 		myParser.initFunTab(); // clear the contents of the function table
+
 		myParser.addStandardFunctions();
+
 		myParser.setTraverse(true);
 
-		
 		// simulate changed options to initialize output
 		optionsChanged();
 	}
@@ -103,7 +108,9 @@ public class Evaluator extends Applet {
 		setBackground(Color.white);
 		
 		GridBagLayout gridbag = new GridBagLayout();
+
 		GridBagConstraints c = new GridBagConstraints();
+
 		setLayout(gridbag);
 
 		// Expression

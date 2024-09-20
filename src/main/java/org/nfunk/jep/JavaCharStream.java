@@ -80,7 +80,9 @@ public class JavaCharStream
   protected void ExpandBuff(boolean wrapAround)
   {
      char[] newbuffer = new char[bufsize + 2048];
+
      int newbufline[] = new int[bufsize + 2048];
+
      int newbufcolumn[] = new int[bufsize + 2048];
 
      try
@@ -88,16 +90,21 @@ public class JavaCharStream
         if (wrapAround)
         {
            System.arraycopy(buffer, tokenBegin, newbuffer, 0, bufsize - tokenBegin);
+
            System.arraycopy(buffer, 0, newbuffer,
                                              bufsize - tokenBegin, bufpos);
            buffer = newbuffer;
 
            System.arraycopy(bufline, tokenBegin, newbufline, 0, bufsize - tokenBegin);
+
            System.arraycopy(bufline, 0, newbufline, bufsize - tokenBegin, bufpos);
+
            bufline = newbufline;
 
            System.arraycopy(bufcolumn, tokenBegin, newbufcolumn, 0, bufsize - tokenBegin);
+
            System.arraycopy(bufcolumn, 0, newbufcolumn, bufsize - tokenBegin, bufpos);
+
            bufcolumn = newbufcolumn;
 
            bufpos += (bufsize - tokenBegin);
@@ -105,12 +112,15 @@ public class JavaCharStream
         else
         {
            System.arraycopy(buffer, tokenBegin, newbuffer, 0, bufsize - tokenBegin);
+
            buffer = newbuffer;
 
            System.arraycopy(bufline, tokenBegin, newbufline, 0, bufsize - tokenBegin);
+
            bufline = newbufline;
 
            System.arraycopy(bufcolumn, tokenBegin, newbufcolumn, 0, bufsize - tokenBegin);
+
            bufcolumn = newbufcolumn;
 
            bufpos -= tokenBegin;
@@ -122,6 +132,7 @@ public class JavaCharStream
      }
 
      available = (bufsize += 2048);
+
      tokenBegin = 0;
   }
 
@@ -175,6 +186,7 @@ public class JavaCharStream
            bufpos = 0;
 
         tokenBegin = bufpos;
+
         return buffer[bufpos];
      }
 

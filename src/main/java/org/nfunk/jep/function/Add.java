@@ -34,7 +34,9 @@ public class Add extends PostfixMathCommand
 		checkStack(stack);// check the stack
 		
 		Object sum = stack.pop();
+
 		Object param;
+
 		int i = 1;
         
 		// repeat summation for each one of the current parameters

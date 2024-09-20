@@ -79,8 +79,11 @@ public class Parser/*@bgen(jjtree)*/implements ParserTreeConstants/*@egen*/ {/*@
 
 /*@egen*/
 	private JEP     jep;
+
 	private SymbolTable symTab;
+
 	private OperatorSet opSet;
+
 	private int initialTokenManagerState = DEFAULT;
 	
 	public Node parseStream(java.io.Reader stream, JEP jep_in)

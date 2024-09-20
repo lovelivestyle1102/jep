@@ -1,0 +1,63 @@
+options {
+	JDK_VERSION = "1.8";
+	UNICODE_INPUT = true;
+	STATIC = false;
+}
+
+
+PARSER_BEGIN(RuleParser)
+
+package com.utry.rules;
+
+import java.io.StringReader;
+import java.util.*;
+
+public class RuleParser {
+
+}
+
+PARSER_END(RuleParser)
+
+/***************************************************************
+SKIP
+***************************************************************/
+
+SKIP :
+{
+  " "
+  | "\t"
+  | "\n"
+  | "\r"
+  | <"//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
+  | <"/*" (~["*"])* "*" (~["/"] (~["*"])* "*")* "/">
+}
+
+
+/***************************************************************
+TOKENS
+***************************************************************/
+
+TOKEN : { <EOL : "\n" | "\r" | "\r\n" > }
+
+TOKEN : {
+    <#LETTER : (["_",
+                 "~",
+                 "a"-"z"
+                 ,"A"-"Z"])+ >
+}
+
+/* OPERATORS */
+TOKEN:
+{
+     <LPAREN: "(">
+  |  <RPAREN: ")">
+  |  <AND: "AND">
+  |  <OR: "OR">
+}
+
+void Start() :
+{
+}
+{
+
+}

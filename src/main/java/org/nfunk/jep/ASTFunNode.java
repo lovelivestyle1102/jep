@@ -25,7 +25,7 @@ public class ASTFunNode extends SimpleNode {
 	private String name;
 	
 	/** ID of the operator (if it is one) */
-	private Operator opID=null;
+	private Operator opID = null;
 	
 	/**
 	 * Creates a new ASTFunNode

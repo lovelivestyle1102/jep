@@ -1,0 +1,342 @@
+
+options {
+	JDK_VERSION = "1.8";
+	STATIC = false;
+}
+
+
+/***************************************************************
+PARSER BEGIN
+***************************************************************/
+
+PARSER_BEGIN(Zcode)
+
+package com.utry.func;
+
+import java.io.StringReader;
+import java.util.*;
+
+public class Zcode {
+	ZpContext zpContext;
+
+    public Zcode(String expr){
+        this(new StringReader(expr));
+        zpContext = new ZpContext();
+}
+
+PARSER_END(Zcode)
+
+/***************************************************************
+SKIP
+***************************************************************/
+
+<*> SKIP :
+{
+  " "
+  | "\t"
+  | "\n"
+  | "\r"
+
+  | <"//" (~["\n","\r"])* ("\n"|"\r"|"\r\n")>
+  | <"/*" (~["*"])* "*" (~["/"] (~["*"])* "*")* "/">
+}
+
+
+/***************************************************************
+TOKENS
+***************************************************************/
+
+//<*> TOKEN : /* LITERALS */
+//{
+//	< INTEGER_LITERAL:
+//		<DECIMAL_LITERAL>
+//	>
+//|
+//	< #DECIMAL_LITERAL: ["0"-"9"] (["0"-"9"])* >
+//|
+//	< FLOATING_POINT_LITERAL:
+//		(["0"-"9"])+ "." (["0"-"9"])* (<EXPONENT>)?
+//		| "." (["0"-"9"])+ (<EXPONENT>)?
+//		| (["0"-"9"])+ <EXPONENT>
+//	>
+//|
+//	< #EXPONENT: ["e","E"] (["+","-"])? (["0"-"9"])+ >
+//|
+//	< STRING_LITERAL:
+//		"\""
+//		( (~["\"","\\","\n","\r"])
+//		| ("\\" ["n","t","b","r","f","\\","'","\""]	)
+//		)*
+//		"\""
+//	>
+//}
+
+/* IDENTIFIERS
+
+	Letters before version 2.22
+	< #LETTER: ["_","a"-"z","A"-"Z"] >
+
+	In Ver 2.3.0.1 presence of . in an identifier is switchable.
+	In the DEFAULT lexical state identifiers can contain a .
+	In the NO_DOT_IN_IDENTIFIERS state identifiers cannot contain a .
+	the state can be set by using
+	Parser.setInitialTokenManagerState
+*/
+
+//<DEFAULT> TOKEN:
+//{
+//	<INDENTIFIER1: <LETTER1>(<LETTER1>|<DIGIT1>|".")*>
+//	|
+//	< #LETTER1:
+//	[
+//		"\u0024",           // $
+//		"\u0041"-"\u005a",  // A - Z
+//		"\u005f",           // _
+//		"\u0061"-"\u007a",  // a - z
+//		"\u00c0"-"\u00d6",  // Upper case symbols of Latin-1 Supplement
+//		"\u00d8"-"\u00f6",  // Lower case symbols of Latin-1 Supplement
+//		"\u00f8"-"\u00ff",  // More lower case symbols of Latin-1 Supplement
+//		"\u0100"-"\u1fff",  // Many languages (including Greek)
+//		"\u3040"-"\u318f",  // Hiragana, Katakana, Bopomofo, Hangul Compatibility Jamo
+//		"\u3300"-"\u337f",  // CJK Compatibility
+//		"\u3400"-"\u3d2d",  // CJK Unified Ideographs Extension A
+//		"\u4e00"-"\u9fff",  // CJK Unified Ideographs
+//		"\uf900"-"\ufaff"   // CJK Compatibility Ideographs
+//	]
+//	>
+//|
+//	< #DIGIT1: ["0"-"9"] >
+//}
+//
+//<NO_DOT_IN_IDENTIFIERS> TOKEN:
+//{
+//	<INDENTIFIER2: <LETTER2>(<LETTER2>|<DIGIT2>)*>
+//	|
+//	< #LETTER2:
+//	[
+//		"\u0024",           // $
+//		"\u0041"-"\u005a",  // A - Z
+//		"\u005f",           // _
+//		"\u0061"-"\u007a",  // a - z
+//		"\u00c0"-"\u00d6",  // Upper case symbols of Latin-1 Supplement
+//		"\u00d8"-"\u00f6",  // Lower case symbols of Latin-1 Supplement
+//		"\u00f8"-"\u00ff",  // More lower case symbols of Latin-1 Supplement
+//		"\u0100"-"\u1fff",  // Many languages (including Greek)
+//		"\u3040"-"\u318f",  // Hiragana, Katakana, Bopomofo, Hangul Compatibility Jamo
+//		"\u3300"-"\u337f",  // CJK Compatibility
+//		"\u3400"-"\u3d2d",  // CJK Unified Ideographs Extension A
+//		"\u4e00"-"\u9fff",  // CJK Unified Ideographs
+//		"\uf900"-"\ufaff"   // CJK Compatibility Ideographs
+//	]
+//	>
+//	|
+//	< #DIGIT2: ["0"-"9"] >
+//}
+
+TOKEN : { <EOL : "\n" | "\r" | "\r\n" > }
+
+TOKEN : {
+   <ID : <LETTER> (<DIGITS>|<LETTER>)*>
+}
+
+TOKEN : {
+    <#LETTER : (["_",
+                 "~",
+                 "a"-"z"
+                 ,"A"-"Z"])+ >
+}
+
+TOKEN : {
+   <NUMBER : <DIGITS>
+   | <DIGITS> "." <DIGITS>
+   >
+ |
+   <#DIGITS : (["0"-"9"])+>
+}
+
+
+/* OPERATORS */
+TOKEN:
+{
+     <LPAREN: "(">
+  |  <RPAREN: ")">
+  |  <LBPAREN: "{">
+  |  <RBPAREN: "}">
+  |  <ADD: "+">
+  |  <SUBTRACT: "-">
+  |  <MULTIPLY: "*">
+  |  <DIVIDE: "/">
+  |  <EQUALS: "=">
+  |  <COMMA: ",">
+  |  <SEMIC: ";">
+  |  <SINGLE_QUOT: "'">
+  |  <UNION: "UNION" | "union">
+  |  <INTERSECT: "INTERSECT" | "intersect">
+  |  <SET_SUB: "SUBTRACT" | "subtract">
+  |  <PRINT: "PRINT" | "print">
+  |  <PRINTLN: "PRINTLN" | "println">
+}
+
+void parse():
+{
+}
+{
+   (
+      LOOKAHEAD(2,<ID> <EQUALS>)
+      assignExp() <SEMIC>
+      |
+      printFunction() <SEMIC>
+   )+
+}
+
+void printFunction():
+{
+    int flag;
+    Object target = null;
+    Token vt;
+}
+{
+    (
+       <PRINT> {flag = 1;}
+       |
+       <PRINTLN> {flag = 2;}
+    )
+
+    <LPAREN>
+       (
+              vt = <ID> {target = zpContext.getVariable(vt.image);}
+           |  target = calc()
+           |  target = defineSets()
+           |  target = setOperFunction()
+       )
+    <RPAREN>
+
+    {
+       PrintOperator print = new PrintOperator(flag, target);
+       print.operator();
+    }
+}
+
+void assignExp():
+{
+   Token t;
+   double v;
+   ZcOperator operator = null;
+}
+{
+   t = <ID> <EQUALS>
+   (
+        v = calc() { zpContext.putVariable(t.image,v);}
+     |  operator = setOperFunction() {zpContext.putVariable(t.image, operator);}
+     |  operator = defineSets() {zpContext.putVariable(t.image, operator);}
+   )
+}
+
+ZcOperator defineSets():
+{
+     Set data = new LinkedHashSet();
+     ZcResult elem = null;
+}
+{
+     <LBPAREN>
+       (
+         elem = element() {data.add(elem.getData());}
+         (
+            <COMMA>
+            elem = element() {data.add(elem.getData());}
+         )*
+       )*
+     <RBPAREN>
+     {return new SetOperator(data);}
+}
+
+ZcResult element():
+{
+     Token t;
+     double v;
+}
+{
+     v = calc() {return new ZcResult(v);}
+   |
+     <SINGLE_QUOT> t = <ID> <SINGLE_QUOT> {return new ZcResult(t.image);}
+}
+
+ZcOperator setOperFunction():
+{
+    int flag;
+    List<ZcOperator> pList = new ArrayList<ZcOperator>();
+    ZcOperator operator = null;
+}
+{
+    (
+         <UNION> {flag = 1;}
+      |  <INTERSECT> {flag = 2;}
+      |  <SET_SUB> {flag = 3;}
+    )
+
+    <LPAREN>
+       operator = setOperBase() {pList.add(operator);}
+       (
+          <COMMA>
+          operator = setOperBase() {pList.add(operator);}
+       )+
+    <RPAREN>
+
+    {return new SetFunctionOperator(flag, pList,zpContext)}
+}
+
+ZcOperator setOperBase():
+{
+    ZcOperator operator = null;
+    Token t;
+}
+{
+     operator = defineSets() {return operator;}
+  |  t = <ID> {return zpContext.getVariable(t.image);}
+  |  operator = setOperFunction() {return operator;}
+}
+
+double calc():
+{
+     double left;
+     double right;
+}
+{
+     left = mutlOrDiv()
+
+     (
+           <ADD> right = mutlOrDiv() { left += right;}
+        |  <SUBTRACT> right = mutlOrDiv() {left = left - right;}
+     )*
+
+     {
+        return left;
+     }
+}
+
+double mutlOrDiv():
+{
+    double left;
+    double right;
+}
+{
+    left = parseBase()
+    (
+         <MULTIPLY> right = parseBase() {left += right;}
+      |  <DIVIDE> right = parseBase() {left = left/right;}
+    )*
+    {
+         return left;
+    }
+}
+
+double parseBase():
+{
+    Token t = null;
+    double num;
+}
+{
+    t = <NUMBER> {return Double.parseDouble(t.image);}
+  |
+    <LPAREN> num = calc() <RPAREN> {return num;}
+}

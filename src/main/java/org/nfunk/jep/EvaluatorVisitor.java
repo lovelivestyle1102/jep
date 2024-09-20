@@ -162,6 +162,7 @@ public class EvaluatorVisitor implements ParserVisitor, EvaluatorI {
 			return ((SpecialEvaluationI) pfmc).evaluate(
 				node,null,this,new Stack(),this.symTab);
 		}
+
 		if(pfmc instanceof CallbackEvaluationI) {
 		    ASTFunNode node = new ASTFunNode(ParserTreeConstants.JJTFUNNODE);
 			node.setFunction("TmpFun",pfmc);
@@ -174,14 +175,18 @@ public class EvaluatorVisitor implements ParserVisitor, EvaluatorI {
 		}
 
 	    Stack lstack = new Stack();
+
 		for(int i=0;i<children.length;++i)
 		{
 			if(!(children[i] instanceof ASTConstant))
 				throw new ParseException("buildConstantNode: arguments must all be constant nodes");
 			lstack.push(((ASTConstant) children[i]).getValue());
 		}
+
 		pfmc.setCurNumberOfParameters(children.length);
+
 		pfmc.run(lstack);
+
 		return lstack.pop();
 	}
 	/**
@@ -213,6 +218,7 @@ public class EvaluatorVisitor implements ParserVisitor, EvaluatorI {
 
 		if (node == null)
 			return null;
+
 		PostfixMathCommandI pfmc = node.getPFMC();
 
 		// check if the function class is set

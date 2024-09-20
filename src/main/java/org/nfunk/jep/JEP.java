@@ -464,6 +464,7 @@ public class JEP {
 		try {
 			// try parsing
 			errorList.removeAllElements();
+
 			topNode = parser.parseStream(reader, this);
 			
 			// if there is an error in the list, the parse failed

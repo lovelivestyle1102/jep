@@ -27,33 +27,50 @@ public class OperatorSet {
 		
 	/** everyone can read but not write these operators **/
 	protected Operator OP_GT     =  new Operator(">",new Comparative(Comparative.GT));
+
 	protected Operator OP_LT     =  new Operator("<",new Comparative(Comparative.LT));
+
 	protected Operator OP_EQ     =  new Operator("==",new Comparative(Comparative.EQ));
+
 	protected Operator OP_LE     =  new Operator("<=",new Comparative(Comparative.LE));
+
 	protected Operator OP_GE     =  new Operator(">=",new Comparative(Comparative.GE));
+
 	protected Operator OP_NE     =  new Operator("!=",new Comparative(Comparative.NE));
 
 	protected Operator OP_AND    =  new Operator("&&",new Logical(0));
+
 	protected Operator OP_OR     =  new Operator("||",new Logical(1));
+
 	protected Operator OP_NOT    = new Operator("!",new Not());
 
 	protected Operator OP_ADD   =  new Operator("+",new Add());
+
 	protected Operator OP_SUBTRACT  =  new Operator("-",new Subtract());
+
 	protected Operator OP_UMINUS =  new Operator("UMinus","-",new UMinus());
 
 	protected Operator OP_MULTIPLY    =  new Operator("*",new Multiply());
+
 	protected Operator OP_DIVIDE = new Operator("/",new Divide());
+
 	protected Operator OP_MOD    = new Operator("%",new Modulus());
+
 	/** unary division i.e. 1/x or x^(-1) **/ 
 	protected Operator OP_UDIVIDE =  new Operator("UDivide","^-1",null);
 
 	protected Operator OP_POWER  = new Operator("^",new Power());
 
-	protected Operator OP_ASSIGN = new Operator("=",new Assign()); 
-	protected Operator OP_DOT = new Operator(".",new Dot()); 
-	protected Operator OP_CROSS = new Operator("^^",new Cross()); 
-	protected Operator OP_LIST = new Operator("LIST",new List()); 
+	protected Operator OP_ASSIGN = new Operator("=",new Assign());
+
+	protected Operator OP_DOT = new Operator(".",new Dot());
+
+	protected Operator OP_CROSS = new Operator("^^",new Cross());
+
+	protected Operator OP_LIST = new Operator("LIST",new List());
+
 	protected Operator OP_ELEMENT = new Operator("[]",new Ele());
+
 //	protected Operator OP_RANGE = new Operator(":",new Range());
 	public OperatorSet()
 	{

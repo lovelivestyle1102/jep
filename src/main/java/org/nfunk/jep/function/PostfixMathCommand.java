@@ -79,6 +79,7 @@ public class PostfixMathCommand implements PostfixMathCommandI
 		if(numberOfParameters == -1) return true;
 		return (numberOfParameters==n);
 	}
+
 	/**
 	 * Throws an exception because this method should never be called under
 	 * normal circumstances. Each function should use it's own run() method

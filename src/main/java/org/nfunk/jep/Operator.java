@@ -16,8 +16,10 @@ public class Operator {
 
 	/** A unique name defining the operator. */
 	private String name;
+
 	/** The symbol for the operator, used for printing. */
 	private String symbol;
+
 	/** Postfix mathcommand */
 	private PostfixMathCommandI pfmc;
 	
@@ -49,12 +51,17 @@ public class Operator {
 		this.name = name; this.pfmc = pfmc;
 		this.symbol = symbol;
 	}
+
 	/** returns the symbol used by this operator. */
 	public final String getSymbol() {return symbol;}
+
 	/** returns a unique name definig this operator. */
 	public final String getName() {return name;}
+
 	public final PostfixMathCommandI getPFMC() { return pfmc;}
+
 	public final void setPFMC(PostfixMathCommandI pfmc) { this.pfmc = pfmc;}
+
 	/** returns a verbose representation of the operator. **/
 	public String toString() { return "Operator: \""+name+"\""; }
 }

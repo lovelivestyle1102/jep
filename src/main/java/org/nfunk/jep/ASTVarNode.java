@@ -20,6 +20,7 @@ public class ASTVarNode extends SimpleNode {
 	
 	public ASTVarNode(int id) {
 		super(id);
+
 		var = null;
 	}
 	

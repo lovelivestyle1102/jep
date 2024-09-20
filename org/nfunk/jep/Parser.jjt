@@ -71,6 +71,7 @@ PARSER BEGIN
 ***************************************************************/
 
 PARSER_BEGIN(Parser)
+
 package org.nfunk.jep;
 
 import java.util.Vector;
@@ -78,18 +79,27 @@ import org.nfunk.jep.function.*;
 import org.nfunk.jep.type.*;
 
 public class Parser {
+    private StringBuffer stringBuffer = new StringBuffer();
+
 	private JEP     jep;
+
 	private SymbolTable symTab;
+
 	private OperatorSet opSet;
+
 	private int initialTokenManagerState = DEFAULT;
 	
 	public Node parseStream(java.io.Reader stream, JEP jep_in)
 							throws ParseException {
 		restart(stream,jep_in);
+
 		// Parse the expression, and return the 
 		enable_tracing();
+
 		Node node = Start();
+
 		if (node == null) throw new ParseException("No expression entered");
+
 		return node.jjtGetChild(0);
 	}
 
@@ -127,7 +137,9 @@ public class Parser {
 	public Node continueParse() throws ParseException
 	{
 		ASTStart node = Start();
+
 		if (node==null) return null;
+
 		return node.jjtGetChild(0);
 	}
 
@@ -154,9 +166,13 @@ public class Parser {
 	 */
 	private String replaceEscape(String inputStr) {
 		int len = inputStr.length();
+
 		int p = 0;
+
 		int i;
+
 		String metachars = "tnrbf\\\"'";
+
 		String chars = "\t\n\r\b\f\\\"'";
 		
 		StringBuffer output = new StringBuffer();
@@ -379,8 +395,7 @@ void AssignExpression() : {} // rjm addition
 			
 			jjtThis.setOperator(opSet.getAssign());
 		}
-	  )
-	  #FunNode(2)
+	)#FunNode(2)
 }
 
 void RightExpression() :
@@ -602,9 +617,6 @@ void UnaryExpressionNotPlusMinus() :
 	|
 	<LRND> Expression() <RRND>
 	|
-//	LOOKAHEAD(<LSQ> Expression() <COLON>)
-//	RangeExpression()
-//	|
 	ListExpression()
 }
 
@@ -749,7 +761,7 @@ void AnyConstant() #Constant:
 	}
 	|
 	value = RealConstant() {
-		jjtThis.setValue(value);
+	    jjtThis.setValue(value);
 //	}
 //	|
 //	value = Array() {
